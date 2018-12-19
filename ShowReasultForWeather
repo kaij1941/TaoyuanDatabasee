@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace ShowReasultForWeather
+{
+    public partial class Form1 : Form
+    {
+        int mon;
+        int year;
+        //string[] Picname = { "201201.png", "201202.png", "201203.png", "201204.png", "201205.png", "201206.png", "201207.png", "201208.png", "201209.png", "201210.png", "201211.png","201212.png" };
+        Bitmap bitmap ;
+        List<Bitmap> Images = new List<Bitmap>();
+        List<Bitmap> Images2 = new List<Bitmap>();
+        //int ShowNum = 0;
+        public Form1()
+        {
+            InitializeComponent();
+            for (int y = 2012; y < 2013; y++)
+                for (int m = 1; m < 13; m++)
+                {
+                    if (m < 10)
+                        bitmap = new Bitmap(y.ToString() + "0" + m.ToString() + ".png");
+                    else
+                        bitmap = new Bitmap(y.ToString() + m.ToString() + ".png");
+                    Images.Add(bitmap);
+                }
+            for (int y = 12012; y < 12013; y++)
+                for (int m = 1; m < 13; m++)
+                {
+                    if (m < 10)
+                        bitmap = new Bitmap(y.ToString() + "0" + m.ToString() + ".png");
+                    else
+                        bitmap = new Bitmap(y.ToString() + m.ToString() + ".png");
+                    Images2.Add(bitmap);
+                }
+            pictureBox1.Image = Images[0];
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.Image = Images2[0];
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            label1.Text = 2012.ToString() + "0" + (trackBar2.Value + 1).ToString();
+        }
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            pictureBox1.Image = Images[trackBar2.Value];
+            pictureBox2.Image = Images2[trackBar2.Value];
+            if (trackBar2.Value < 12)
+                if (trackBar2.Value < 10)
+                    label1.Text = 2012.ToString() + "0" + (trackBar2.Value + 1).ToString();
+                else label1.Text = 2012.ToString() + (trackBar2.Value + 1).ToString();
+        }
+    }
+}
