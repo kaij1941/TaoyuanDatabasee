@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+
+namespace googlemappra
+{
+    public partial class Form1 : Form
+    {
+
+        //string url = String.Format("http://maps.google.com/maps/api/geocode/json?sensor=false&address={0}", address);
+        //string result = String.Empty;
+        string totalString, firstString;
+
+        string address, json;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(textBox2.Text);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            textBox2.Clear();
+            //////////////////////////////
+            string strLineData;
+
+            using (StringReader sr = new StringReader(textBox1.Text.Trim()))
+            {
+                //讀取第一行
+                strLineData = sr.ReadLine();
+
+                while (!String.IsNullOrEmpty(strLineData))
+                {
+                    //這邊放你的程式邏輯
+                    //...
+
+                    address = strLineData;
+                    //address = "台北市信義區信義路五段7號";
+
+                    //取得json字串
+                    json = GoogleAPIUtilities.ConvertAddressToJsonString(address);
+
+                    //取得緯度、經度
+                    double[] latLng = GoogleAPIUtilities.傳入GeocodingAPI產生的Json字串取得經緯度(json);
+
+                    //MessageBox.Show($"緯度:{latLng[0]},經度:{latLng[1]}");
+                    
+                    //textBox2.AppendText($"緯度:{latLng[0]},經度:{latLng[1]}" + "\r\n");
+                    textBox2.AppendText(latLng[0] + "," + latLng[1] + "\r\n");
+                    textBox2.Invalidate();
+                    //讀取下一行
+                    strLineData = sr.ReadLine();
+                    
+                }
+            }
+
+            
+            //////////////////////////////
+
+
+            //address = textBox1.Text;
+            ////address = "台北市信義區信義路五段7號";
+
+            ////取得json字串
+            //json = GoogleAPIUtilities.ConvertAddressToJsonString(address);
+
+            ////取得緯度、經度
+            //double[] latLng = GoogleAPIUtilities.傳入GeocodingAPI產生的Json字串取得經緯度(json);
+            //textBox2.Text = $"緯度:{latLng[0]},經度:{latLng[1]}";
+            ////MessageBox.Show($"緯度:{latLng[0]},經度:{latLng[1]}");
+        }
+
+        private void Form1_Load(object sender, EventArgs e){}
+    }
+}
